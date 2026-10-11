@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — LegalAI{% endblock %}
+
+{% block content %}
+
+<div class="workspace">
+
+```
+<aside class="sidebar">
+
+    <div class="sidebar-title">
+        WORKSPACE
+    </div>
+
+    <a
+        href="{{ url_for('main.dashboard') }}"
+        class="sidebar-link active"
+    >
+        <span>⌂</span>
+        <span>Главная</span>
+    </a>
+
+    <a
+        href="{{ url_for('cases.case_list') }}"
+        class="sidebar-link"
+    >
+        <span>▣</span>
+        <span>Мои дела</span>
+    </a>
+
+    <a
+        href="{{ url_for('cases.documents') }}"
+        class="sidebar-link"
+    >
+        <span>▤</span>
+        <span>Документы</span>
+    </a>
+
+    <a
+        href="{{ url_for('main.ai_assistant') }}"
+        class="sidebar-link"
+    >
+        <span>✦</span>
+        <span>AI Assistant</span>
+    </a>
+
+    <div class="sidebar-title tools-title">
+        ИНСТРУМЕНТЫ
+    </div>
+
+    <a
+        href="{{ url_for('main.templates_page') }}"
+        class="sidebar-link"
+    >
+        <span>▱</span>
+        <span>Шаблоны</span>
+    </a>
+
+    <a
+        href="{{ url_for('main.settings') }}"
+        class="sidebar-link"
+    >
+        <span>⚙</span>
+        <span>Настройки</span>
+    </a>
+
+    <div class="sidebar-bottom">
+
+        <div class="user-card">
+
+            <div class="user-avatar">
+                {{ user.username[0]|upper }}
+            </div>
+
+            <div class="user-info">
+                <strong>{{ user.username }}</strong>
+                <span>{{ user.email }}</span>
+            </div>
+
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="logout"
+        >
+            Выйти
+        </a>
+
+    </div>
+
+</aside>
+
+
+<section class="workspace-content dashboard-page">
+
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <div class="dashboard-label">
+                LEGALAI WORKSPACE
+            </div>
+
+            <h1>
+                Добро пожаловать, {{ user.username }}
+            </h1>
+
+            <p>
+                Юридическая работа с AI
+                в одном рабочем пространстве.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/case"
+            class="new-case-button"
+        >
+            <span>+</span>
+            Новое дело
+        </a>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="dashboard-stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ▣
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Дела
+                </span>
+
+                <strong>
+               {{ cases_count }}
+                </strong>
+
+                <small>
+                    Активных дел
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon document-icon">
+                ▤
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Документы
+                </span>
+
+                <strong>
+                    {{ documents_count }}
+                </strong>
+
+                <small>
+                    Загружено
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon ai-icon">
+                ✦
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    AI анализ
+                </span>
+
+                <strong>
+                    {{ analyses_count }}
+                </strong>
+
+                <small>
+                    Анализов выполнено
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACCESS -->
+
+    <section class="quick-access">
+
+        <div class="quick-access-header">
+
+            <div>
+
+                <div class="dashboard-label">
+                    QUICK ACCESS
+                </div>
+
+                <h2>
+                    Быстрый доступ
+                </h2>
+
+                <p>
+                    Начните работу с LegalAI
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-access-grid">
+
+
+            <!-- CREATE CASE -->
+
+            <a
+                href="/case"
+                class="quick-card"
+            >
+
+                <div class="quick-card-top">
+
+                    <div class="quick-icon case-icon">
+                        ▣
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </div>
+
+                <h3>
+                    Создать дело
+                </h3>
+
+                <p>
+                    Создайте новое юридическое дело
+                    и добавьте информацию о клиенте.
+                </p>
+
+            </a>
+
+
+            <!-- DOCUMENT -->
+
+            <a
+                href="{{ url_for('main.ai_assistant') }}"
+                class="quick-card"
+            >
+
+                <div class="quick-card-top">
+
+                    <div class="quick-icon document-icon">
+                        ▤
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </div>
+
+                <h3>
+                    Загрузить документ
+                </h3>
+
+                <p>
+                    Загрузите договор или другой
+                    юридический документ для AI-анализа.
+                </p>
+
+            </a>
+
+
+            <!-- AI -->
+
+            <a
+                href="{{ url_for('main.ai_assistant') }}"
+                class="quick-card ai-quick-card"
+            >
+
+                <div class="quick-card-top">
+
+                    <div class="quick-icon ai-icon">
+                        ✦
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </div>
+
+                <h3>
+                    AI Assistant
+                </h3>
+
+                <p>
+                    Задавайте вопросы и работайте
+                    с юридической информацией.
+                </p>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</section>
+```
+
+</div>
+
+{% endblock %}

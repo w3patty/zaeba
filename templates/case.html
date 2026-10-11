@@ -1,0 +1,389 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}{{ case.title }} — LegalAI{% endblock %}
+
+{% block content %}
+
+<div class="workspace">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            WORKSPACE
+        </div>
+
+        <a
+            href="{{ url_for('main.dashboard') }}"
+            class="sidebar-link"
+        >
+            <span>⌂</span>
+            <span>Главная</span>
+        </a>
+
+        <a
+            href="{{ url_for('cases.case_list') }}"
+            class="sidebar-link active"
+        >
+            <span>▣</span>
+            <span>Мои дела</span>
+        </a>
+
+        <a
+            href="{{ url_for('cases.documents') }}"
+            class="sidebar-link"
+        >
+            <span>▤</span>
+            <span>Документы</span>
+        </a>
+
+        <a
+            href="{{ url_for('main.ai_assistant') }}"
+            class="sidebar-link"
+        >
+            <span>✦</span>
+            <span>AI Assistant</span>
+        </a>
+
+        <div class="sidebar-title tools-title">
+            ИНСТРУМЕНТЫ
+        </div>
+
+        <a
+            href="{{ url_for('main.templates_page') }}"
+            class="sidebar-link"
+        >
+            <span>▱</span>
+            <span>Шаблоны</span>
+        </a>
+
+        <a
+            href="{{ url_for('main.settings') }}"
+            class="sidebar-link"
+        >
+            <span>⚙</span>
+            <span>Настройки</span>
+        </a>
+
+        <div class="sidebar-bottom">
+
+            <div class="user-card">
+
+                <div class="user-avatar">
+                    {{ current_user.username[0]|upper }}
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        {{ current_user.username }}
+                    </strong>
+
+                    <span>
+                        LegalAI
+                    </span>
+
+                </div>
+
+            </div>
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="logout"
+            >
+                Выйти
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <section class="workspace-content">
+
+        <div class="case-top">
+
+            <a
+                href="{{ url_for('cases.case_list') }}"
+                class="back-link"
+            >
+                ← Вернуться к моим делам
+            </a>
+
+        </div>
+
+
+        <div class="case-header">
+
+            <div class="case-title-area">
+
+                <div class="case-big-icon">
+                    ▣
+                </div>
+
+                <div>
+
+                    <div class="workspace-label">
+                        LEGALAI CASE
+                    </div>
+
+                    <h1>
+                        {{ case.title }}
+                    </h1>
+
+                    <p>
+                        Клиент: {{ case.client_name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="case-header-actions">
+
+                <span class="status-badge">
+                    {{ case.status }}
+                </span>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cases.delete_case', case_id=case.id) }}"
+                    onsubmit="return confirm('Вы действительно хотите удалить это дело и все связанные документы?');"
+                >
+
+                    <button
+                        type="submit"
+                        class="button secondary"
+                    >
+                        🗑️ Удалить дело
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="alert {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <div class="case-info-grid">
+
+            <div class="case-info-card">
+
+                <span class="info-label">
+                    КЛИЕНТ
+                </span>
+
+                <strong>
+                    {{ case.client_name }}
+                </strong>
+
+            </div>
+
+
+            <div class="case-info-card">
+
+                <span class="info-label">
+                    СТАТУС
+                </span>
+
+                <strong>
+                    {{ case.status }}
+                </strong>
+
+            </div>
+
+
+            <div class="case-info-card">
+
+                <span class="info-label">
+                    СОЗДАНО
+                </span>
+
+                <strong>
+                    {{ case.created_at.strftime('%d.%m.%Y') }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="case-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Информация о деле
+                    </h2>
+
+                    <p>
+                        Основная информация по текущему делу
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="case-description">
+
+                {% if case.description %}
+
+                    {{ case.description }}
+
+                {% else %}
+
+                    <span class="muted">
+                        Описание дела не добавлено.
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="case-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Документы
+                    </h2>
+
+                    <p>
+                        Документы этого дела находятся в разделе «Документы».
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('cases.documents') }}"
+                    class="button secondary"
+                >
+                    Открыть документы
+                </a>
+
+            </div>
+
+
+            <div class="ai-placeholder">
+
+                <div class="ai-placeholder-icon">
+                    ▤
+                </div>
+
+                <h3>
+                    Работа с документами
+                </h3>
+
+                <p>
+                    После загрузки документы будут доступны
+                    в разделе «Документы» слева.
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cases.upload_document', case_id=case.id) }}"
+                    enctype="multipart/form-data"
+                    id="uploadForm"
+                >
+
+                    <input
+                        type="file"
+                        name="document"
+                        id="document"
+                        accept=".pdf,.docx,.txt"
+                        required
+                        style="display: none;"
+                    >
+
+                    <label
+                        for="document"
+                        class="button primary upload-button"
+                    >
+                        ↑ Выбрать документ
+                    </label>
+
+                    <button
+                        type="submit"
+                        id="uploadSubmit"
+                        class="button primary"
+                        style="display: none;"
+                    >
+                        Загрузить
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+const documentInput = document.getElementById("document");
+const uploadForm = document.getElementById("uploadForm");
+const uploadSubmit = document.getElementById("uploadSubmit");
+
+if (documentInput && uploadForm && uploadSubmit) {
+
+    documentInput.addEventListener(
+        "change",
+        function () {
+
+            if (documentInput.files.length > 0) {
+
+                uploadSubmit.style.display = "inline-flex";
+                uploadSubmit.textContent = "Загрузить";
+
+            }
+
+        }
+    );
+
+    uploadForm.addEventListener(
+        "submit",
+        function () {
+
+            uploadSubmit.disabled = true;
+            uploadSubmit.textContent = "Загрузка...";
+
+        }
+    );
+
+}
+
+</script>
+
+{% endblock %}
+```

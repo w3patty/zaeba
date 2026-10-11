@@ -1,0 +1,317 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ template.title }} — LegalAI{% endblock %}
+
+{% block content %}
+
+<div class="workspace">
+
+    <aside class="sidebar">
+        <div class="sidebar-title">WORKSPACE</div>
+
+        <a href="{{ url_for('main.dashboard') }}" class="sidebar-link">
+            <span>⌂</span>
+            <span>Главная</span>
+        </a>
+
+        <a href="{{ url_for('cases.case_list') }}" class="sidebar-link">
+            <span>▣</span>
+            <span>Мои дела</span>
+        </a>
+
+        <a href="{{ url_for('cases.documents') }}" class="sidebar-link">
+            <span>▤</span>
+            <span>Документы</span>
+        </a>
+
+        <a href="{{ url_for('main.ai_assistant') }}" class="sidebar-link">
+            <span>✦</span>
+            <span>AI-помощник</span>
+        </a>
+
+        <a href="{{ url_for('main.templates_page') }}"
+           class="sidebar-link active">
+            <span>▱</span>
+            <span>Шаблоны</span>
+        </a>
+
+        <a href="{{ url_for('main.settings') }}" class="sidebar-link">
+            <span>⚙</span>
+            <span>Настройки</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('auth.logout') }}" class="sidebar-link">
+                <span>↪</span>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <section class="workspace-content">
+
+        <div class="case-top">
+            <a href="{{ url_for('main.templates_page') }}"
+               class="back-link">
+                ← Вернуться к шаблонам
+            </a>
+        </div>
+
+        <div class="workspace-header">
+            <div>
+                <div class="workspace-label">LEGALAI TEMPLATE</div>
+
+                <h1>{{ template.title }}</h1>
+
+                <p>{{ template.description }}</p>
+            </div>
+        </div>
+
+        <div class="case-panel">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Содержание шаблона</h2>
+                    <p>
+                        Используйте этот шаблон как основу
+                        для подготовки документа.
+                    </p>
+                </div>
+            </div>
+
+            <div class="document-content">
+
+                <div class="template-content">
+                    <pre>{{ template.content }}</pre>
+                </div>
+
+            </div>
+
+            {% if template.get('source_name') or template.get('source_url') or template.get('verified_date') %}
+            <div class="source-info no-print">
+                <h3>Информация об источнике</h3>
+
+                {% if template.get('source_name') %}
+                <p>
+                    <strong>Источник:</strong>
+                    {{ template.source_name }}
+                </p>
+                {% endif %}
+
+                {% if template.get('source_url') %}
+                <p>
+                    <strong>Ссылка:</strong>
+                    <a href="{{ template.source_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Открыть оригинальный источник
+                    </a>
+                </p>
+                {% endif %}
+
+                {% if template.get('verified_date') %}
+                <p>
+                    <strong>Дата проверки:</strong>
+                    {{ template.verified_date }}
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="template-actions no-print">
+
+                <button
+                    type="button"
+                    class="button primary"
+                    onclick="window.print()">
+                    🖨 Печать документа
+                </button>
+
+                {% if template.get('original_file') %}
+                <a
+                    href="{{ url_for(
+                        'main.download_template_file',
+                        template_id=request.view_args['template_id']
+                    ) }}"
+                    class="button secondary">
+                    ↓ Скачать оригинал
+                </a>
+                {% endif %}
+
+                <a
+                    href="{{ url_for('main.templates_page') }}"
+                    class="button secondary">
+                    ← Все шаблоны
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<style>
+.template-content {
+    margin-top: 24px;
+    background: #FDFBF8;
+    border: 1px solid #E9D9CC;
+    border-radius: 18px;
+    padding: 30px;
+    overflow-x: auto;
+}
+
+.template-content pre {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #2D1F1A;
+}
+
+.template-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.template-actions .button {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.template-actions .primary {
+    background: #F46A2A;
+    color: #FFFFFF;
+}
+
+.template-actions .secondary {
+    background: #FFE6D8;
+    color: #2D1F1A;
+}
+
+.template-actions .button:hover {
+    opacity: 0.9;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #8B6F63;
+    font-size: 14px;
+}
+
+.back-link:hover {
+    color: #F46A2A;
+}
+
+.source-info {
+    margin-top: 24px;
+    padding: 20px;
+    background: #FDFBF8;
+    border: 1px solid #E9D9CC;
+    border-radius: 14px;
+    color: #2D1F1A;
+    overflow-wrap: anywhere;
+}
+
+.source-info h3 {
+    margin-top: 0;
+}
+
+.source-info p {
+    line-height: 1.6;
+}
+
+.source-info a {
+    color: #F46A2A;
+}
+
+@media print {
+    @page {
+        size: auto;
+        margin: 20mm;
+    }
+
+    html,
+    body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    .document-content,
+    .document-content * {
+        visibility: visible !important;
+    }
+
+    .document-content {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .template-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: #FFFFFF !important;
+        overflow: visible !important;
+    }
+
+    .template-content pre {
+        font-family: "Times New Roman", serif !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        color: #000000 !important;
+        white-space: pre-wrap !important;
+        overflow-wrap: break-word !important;
+    }
+
+    .sidebar,
+    .case-top,
+    .workspace-header,
+    .panel-header,
+    .template-actions,
+    .source-info,
+    .no-print {
+        display: none !important;
+    }
+
+    .workspace,
+    .workspace-content,
+    .case-panel {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: #FFFFFF !important;
+    }
+}
+</style>
+
+{% endblock %}

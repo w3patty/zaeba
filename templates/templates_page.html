@@ -1,0 +1,554 @@
+
+{% extends "base.html" %}
+
+{% block title %}Шаблоны — LegalAI{% endblock %}
+
+{% block content %}
+
+<div class="workspace">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">WORKSPACE</div>
+
+        <a href="{{ url_for('main.dashboard') }}" class="sidebar-link">
+            <span>⌂</span><span>Главная</span>
+        </a>
+
+        <a href="{{ url_for('cases.case_list') }}" class="sidebar-link">
+            <span>▣</span><span>Мои дела</span>
+        </a>
+
+        <a href="{{ url_for('cases.documents') }}" class="sidebar-link">
+            <span>▤</span><span>Документы</span>
+        </a>
+
+        <a href="{{ url_for('main.ai_assistant') }}" class="sidebar-link">
+            <span>✦</span><span>AI-помощник</span>
+        </a>
+
+        <a href="{{ url_for('main.templates_page') }}" class="sidebar-link active">
+            <span>▱</span><span>Шаблоны</span>
+        </a>
+
+        <a href="{{ url_for('main.settings') }}" class="sidebar-link">
+            <span>⚙</span><span>Настройки</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('auth.logout') }}" class="sidebar-link">
+                <span>↪</span><span>Выйти</span>
+            </a>
+        </div>
+
+    </aside>
+
+    <section class="workspace-content">
+
+        <div class="workspace-header">
+            <div>
+                <div class="workspace-label">LEGALAI LIBRARY</div>
+                <h1>Шаблоны</h1>
+                <p>Библиотека юридических документов для повседневных задач.</p>
+            </div>
+        </div>
+
+        <div class="case-panel">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Юридические шаблоны</h2>
+                    <p>Выберите документ, чтобы открыть его содержание.</p>
+                </div>
+            </div>
+
+            <div class="template-toolbar">
+                <input
+                    type="search"
+                    id="templateSearch"
+                    class="template-search"
+                    placeholder="Поиск по названию документа..."
+                    aria-label="Поиск по шаблонам"
+                >
+                <div class="template-count">
+                    Найдено: <strong id="templateCount">23</strong>
+                </div>
+            </div>
+
+            <div class="template-categories">
+                <button type="button" class="template-filter active" data-category="all">
+                    Все документы
+                </button>
+                <button type="button" class="template-filter" data-category="contracts">
+                    Договоры
+                </button>
+                <button type="button" class="template-filter" data-category="court">
+                    Споры и обращения
+                </button>
+                <button type="button" class="template-filter" data-category="work">
+                    Работа
+                </button>
+                <button type="button" class="template-filter" data-category="other">
+                    Другие документы
+                </button>
+            </div>
+
+            <div class="quick-grid" id="templateGrid">
+
+                <a href="{{ url_for('main.template_detail', template_id='service-contract') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Договор оказания услуг</h3>
+                        <p>Условия оказания и оплаты услуг между заказчиком и исполнителем.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='employment-contract') }}" class="quick-card" data-category="work">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Трудовой договор</h3>
+                        <p>Основные условия трудовых отношений между работодателем и работником.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='claim') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Претензия</h3>
+                        <p>Требование об устранении нарушения и урегулировании спора.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='lawsuit') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Исковое заявление</h3>
+                        <p>Структура обращения в суд с изложением обстоятельств и требований.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='power-of-attorney') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Доверенность</h3>
+                        <p>Оформление полномочий представителя.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='nda') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Соглашение о конфиденциальности</h3>
+                        <p>Условия защиты конфиденциальной информации.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='sale-contract') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Договор купли-продажи</h3>
+                        <p>Условия продажи, оплаты и передачи имущества.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='lease-contract') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Договор аренды</h3>
+                        <p>Условия пользования помещением или другим имуществом.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='loan-contract') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Договор займа</h3>
+                        <p>Сумма займа, сроки и условия возврата денежных средств.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='contract-work') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Договор подряда</h3>
+                        <p>Условия выполнения, стоимости и приёмки работ.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='termination-agreement') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Соглашение о расторжении</h3>
+                        <p>Оформление согласованного прекращения договора.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='additional-agreement') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Дополнительное соглашение</h3>
+                        <p>Изменение условий действующего договора.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='application') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Заявление</h3>
+                        <p>Универсальная структура официального обращения.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='complaint') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Жалоба</h3>
+                        <p>Обжалование действий или бездействия.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='response-to-claim') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Ответ на претензию</h3>
+                        <p>Подготовка ответа на полученное требование.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='refund-request') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Заявление о возврате денег</h3>
+                        <p>Требование о возврате оплаты за товар или услугу.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='personal-data-consent') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Согласие на обработку персональных данных</h3>
+                        <p>Определение целей и условий обработки персональных данных.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='service-acceptance-act') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Акт оказанных услуг</h3>
+                        <p>Подтверждение оказания услуг по договору.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='work-acceptance-act') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Акт выполненных работ</h3>
+                        <p>Фиксация результата выполненных работ.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='debt-acknowledgment') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Расписка о получении денег</h3>
+                        <p>Подтверждение получения денежных средств.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='debt-repayment-schedule') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>График погашения долга</h3>
+                        <p>Согласование дат и сумм погашения задолженности.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='pretrial-demand') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Досудебное требование</h3>
+                        <p>Требование исполнить обязательства до обращения в суд.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='information-request') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Запрос информации</h3>
+                        <p>Запрос сведений или копий документов.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='government-appeal') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Обращение в госорган</h3>
+                        <p>Официальное обращение в государственный орган.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='labor-complaint') }}" class="quick-card" data-category="work">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Жалоба по трудовому вопросу</h3>
+                        <p>Обращение по предполагаемому нарушению трудовых прав.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='resignation-letter') }}" class="quick-card" data-category="work">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Заявление об увольнении</h3>
+                        <p>Заявление о прекращении трудовых отношений.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='leave-request') }}" class="quick-card" data-category="work">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Заявление на отпуск</h3>
+                        <p>Обращение о предоставлении отпуска.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='employment-document-request') }}" class="quick-card" data-category="work">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Запрос документов у работодателя</h3>
+                        <p>Запрос документов, связанных с работой.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='personal-data-consent-withdrawal') }}" class="quick-card" data-category="other">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Отзыв согласия на обработку данных</h3>
+                        <p>Обращение об отзыве ранее предоставленного согласия.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='delivery-acceptance-act') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Акт приёма-передачи имущества</h3>
+                        <p>Фиксация передачи имущества или оборудования.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='rent-return-act') }}" class="quick-card" data-category="contracts">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Акт возврата арендованного имущества</h3>
+                        <p>Подтверждение возврата имущества арендодателю.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="{{ url_for('main.template_detail', template_id='payment-demand') }}" class="quick-card" data-category="court">
+                    <div class="quick-icon">▣</div>
+                    <div>
+                        <h3>Требование об оплате задолженности</h3>
+                        <p>Требование погасить задолженность по оплате.</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+            </div>
+
+            <div id="noTemplates" class="no-templates" hidden>
+                <h3>Шаблоны не найдены</h3>
+                <p>Попробуйте изменить поисковый запрос или категорию.</p>
+            </div>
+
+        </div>
+
+        <div class="empty-workspace">
+            <div class="empty-icon">✦</div>
+            <h3>Создавайте документы быстрее</h3>
+            <p>
+                Выберите подходящий шаблон, заполните данные
+                и проверьте документ перед использованием.
+            </p>
+        </div>
+
+    </section>
+
+</div>
+
+<style>
+.template-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.template-search {
+    flex: 1;
+    min-width: 220px;
+    padding: 13px 16px;
+    border: 1px solid #e5ddd6;
+    border-radius: 12px;
+    background: #fff;
+    color: #2d1f1a;
+    font: inherit;
+    outline: none;
+}
+
+.template-search:focus {
+    border-color: #f46a2a;
+    box-shadow: 0 0 0 3px rgba(244, 106, 42, 0.12);
+}
+
+.template-count {
+    color: #8b6f63;
+    font-size: 14px;
+}
+
+.template-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.template-filter {
+    border: 1px solid #e5ddd6;
+    background: #fff;
+    color: #5e4940;
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+}
+
+.template-filter:hover,
+.template-filter.active {
+    background: #2d1f1a;
+    border-color: #2d1f1a;
+    color: #fff;
+}
+
+.quick-card {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.quick-card:hover {
+    text-decoration: none;
+}
+
+.quick-card[hidden] {
+    display: none !important;
+}
+
+.no-templates {
+    text-align: center;
+    padding: 36px 16px;
+    color: #8b6f63;
+}
+
+.no-templates h3 {
+    color: #2d1f1a;
+}
+
+@media (max-width: 600px) {
+    .template-toolbar {
+        align-items: stretch;
+    }
+
+    .template-search {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("templateSearch");
+    const cards = Array.from(document.querySelectorAll("#templateGrid .quick-card"));
+    const filters = Array.from(document.querySelectorAll(".template-filter"));
+    const count = document.getElementById("templateCount");
+    const emptyMessage = document.getElementById("noTemplates");
+
+    let activeCategory = "all";
+
+    function filterTemplates() {
+        const query = searchInput.value.trim().toLocaleLowerCase("ru");
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const text = card.innerText.toLocaleLowerCase("ru");
+            const category = card.dataset.category || "other";
+
+            const matchesSearch = text.includes(query);
+            const matchesCategory =
+                activeCategory === "all" || category === activeCategory;
+
+            const visible = matchesSearch && matchesCategory;
+            card.hidden = !visible;
+
+            if (visible) {
+                visibleCount++;
+            }
+        });
+
+        count.textContent = visibleCount;
+        emptyMessage.hidden = visibleCount !== 0;
+    }
+
+    searchInput.addEventListener("input", filterTemplates);
+
+    filters.forEach(function (button) {
+        button.addEventListener("click", function () {
+            activeCategory = button.dataset.category;
+
+            filters.forEach(function (item) {
+                item.classList.toggle("active", item === button);
+            });
+
+            filterTemplates();
+        });
+    });
+
+    count.textContent = cards.length;
+    filterTemplates();
+});
+</script>
+
+{% endblock %}
